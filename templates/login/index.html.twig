@@ -1,0 +1,43 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/loginStyles.css') }}">
+{% endblock %}
+
+{% block body %}
+
+
+<section class="seccionLogin">
+    <div class="contenedorForm">
+        <div class="formIzquierda">
+            <h2>
+                El cine en tu casa
+            </h2>
+        </div>
+
+        <div class="formDerecha">
+
+            <div class="tituloDerecha">
+                <h2>Bienvenido</h2>
+            </div>
+
+            <div class="formContenedor">
+                <form class="formularioLogin" action="{{ path('app_login') }}" method="post">
+                    <label for="username">Email:</label>
+                        <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="ejemplo@correo.com"/>
+                    <label for="password">Contraseña:</label>
+                        <input type="password" id="password" name="_password" placeholder="******"/>
+
+                        {% if error %}
+                            <div class="msgError">Usuario o contraseña incorrecta</div>
+                        {% endif %}
+                    <button type="submit">Login</button>
+                </form>
+
+                <div class="registroContenedor">
+                    <span>¿No tienes cuenta?</span>
+                    <a href="{{ path('app_register') }}">Registrarme</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

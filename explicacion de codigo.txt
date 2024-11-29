@@ -1,0 +1,170 @@
+LoginController
+El LoginController maneja el proceso de autenticación de los usuarios. Aquí están los detalles de cada parte del código:
+
+Método login:
+
+public function login(AuthenticationUtils $authenticationUtils): Response
+{
+    // Obtener el último error de autenticación (si existe)
+    $error = $authenticationUtils->getLastAuthenticationError();
+    // Obtener el último nombre de usuario ingresado (en este caso el email)
+    $lastUsername = $authenticationUtils->getLastUsername();
+
+    return $this->render('login/index.html.twig', [
+        'last_username' => $lastUsername,
+        'error' => $error,
+    ]);
+}
+
+AuthenticationUtils: Symfony proporciona esta clase para ayudar con el manejo de la autenticación. 
+Se usa para obtener el último error de autenticación (si hubo uno) y el último nombre de usuario ingresado.
+getLastAuthenticationError(): Obtiene el error de autenticación si es que ocurrió alguno.
+getLastUsername(): Obtiene el último nombre de usuario (en este caso, el email) que fue intentado para loguearse.
+$this->render('login/index.html.twig', [...]): Este comando renderiza una vista (archivo Twig) y pasa los datos de la última autenticación 
+(el nombre de usuario y el error).
+
+Método logout:
+
+public function logout(): void
+{
+    // controller can be blank: it will never be called!
+    throw new \Exception('Activate logout in security.yaml');
+}
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Este controlador gestiona el registro de un usuario, desde recibir los datos del formulario hasta guardarlos en la base de datos y 
+redirigir al usuario a otra página.
+
+namespace App\Controller;
+
+use App\Entity\Usuario;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
+use: Aquí estamos importando varias clases necesarias para el controlador:
+Usuario: La entidad que representa a un usuario en la base de datos.
+EntityManagerInterface: Interfaz que permite interactuar con la base de datos, guardar y recuperar entidades.
+AbstractController: La clase base para controladores en Symfony que proporciona funcionalidades útiles como el método render() y la gestión de rutas.
+Request: Clase para manejar la solicitud HTTP que llega al servidor.
+Response: Clase para manejar la respuesta que se enviará al cliente.
+Route: Permite definir las rutas de la aplicación utilizando anotaciones.
+UserPasswordHasherInterface: Interfaz para manejar el proceso de hashing de contraseñas de manera segura.
+
+#[Route('/register', name: 'app_register')]
+#[Route('/register', name: 'app_register')]: Esta anotación define la ruta del controlador. En este caso, el controlador se ejecutará cuando se acceda a 
+/register en el navegador y se le asigna el nombre app_register a esta ruta, que se puede usar para redirigir o generar enlaces a esta ruta más adelante.
+
+public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+
+register: Es el método que se ejecuta cuando se hace una solicitud a la ruta /register.
+Parámetros:
+Request $request: El objeto Request que representa la solicitud HTTP. Se usa para obtener datos enviados en un formulario o en la URL.
+UserPasswordHasherInterface $passwordHasher: Esta interfaz se utiliza para encriptar (hashear) la contraseña antes de almacenarla en la base de datos.
+EntityManagerInterface $entityManager: Permite interactuar con la base de datos, en este caso para guardar el nuevo usuario.
+
+if ($request->isMethod('POST')): Verifica si la solicitud HTTP es de tipo POST, lo que indica que el formulario ha sido enviado. 
+Si es así, se procesa la información del formulario.
+
+$nombre = $request->get('nombre');
+$email = $request->get('email');
+$password = $request->get('password');
+$confirmarContrasena = $request->get('confirmar_contrasena');
+$request->get('nombre'): Obtiene el valor del campo nombre del formulario. Lo mismo sucede con los demás campos (email, password, confirmar_contrasena).
+Estos valores son los datos introducidos por el usuario en el formulario de registro.
+
+Validación de las Contraseñas
+php
+Copiar código
+if ($password !== $confirmarContrasena) {
+    $this->addFlash('error', 'Las contraseñas no coinciden.');
+    return $this->redirectToRoute('app_register');
+}
+Validación de la Contraseña: Se compara la contraseña ingresada con la confirmación de la contraseña (confirmar_contrasena). Si no coinciden, se agrega 
+un mensaje de error usando addFlash() y se redirige nuevamente a la ruta de registro (app_register).
+
+Validación del Correo Electrónico
+php
+Copiar código
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $this->addFlash('error', 'El correo electrónico no es válido.');
+    return $this->redirectToRoute('app_register');
+}
+Validación del Correo: Se valida que el correo electrónico ingresado tenga un formato válido utilizando filter_var() con el filtro FILTER_VALIDATE_EMAIL. 
+Si no es válido, se agrega un mensaje de error y se redirige al formulario de registro.
+
+Creación de un Nuevo Usuario
+php
+Copiar código
+$usuario = new Usuario();
+$usuario->setNombre($nombre);
+$usuario->setEmail($email);
+Se crea una nueva instancia de la entidad Usuario y se le asignan los valores de nombre y email obtenidos del formulario.
+
+Encriptación de la Contraseña
+php
+Copiar código
+$hashedPassword = $passwordHasher->hashPassword($usuario, $password);
+$usuario->setPassword($hashedPassword);
+Encriptación de la Contraseña: Se utiliza UserPasswordHasherInterface para hashear la contraseña. El método hashPassword() toma como parámetros la entidad Usuario y la contraseña en texto plano. Esto asegura que la contraseña almacenada en la base de datos no esté en texto claro, sino en una forma encriptada.
+
+Guardar el Usuario en la Base de Datos
+php
+Copiar código
+$entityManager->persist($usuario);
+$entityManager->flush();
+Guardar en la Base de Datos: persist() marca la entidad Usuario para que sea guardada en la base de datos. Luego, flush() realiza la operación real de escritura en la base de datos, guardando al nuevo usuario con su información (incluida la contraseña hasheada).
+
+Redirección al Home
+php
+Copiar código
+return $this->redirectToRoute('home');
+Después de registrar al usuario, se redirige al usuario a la página de inicio (home). Esto se logra mediante la función redirectToRoute(), que redirige a una ruta específica. En este caso, se redirige a home (suponiendo que tienes definida una ruta llamada home en tu aplicación).
+
+Renderizado del Formulario (si no se envió el formulario)
+php
+Copiar código
+return $this->render('register/index.html.twig');
+Si la solicitud no es de tipo POST (es decir, si el formulario no ha sido enviado), simplemente se muestra el formulario de registro. Esto se hace con el método render(), que renderiza el archivo register/index.html.twig (que contiene el formulario de registro).
+
+Resumen de Flujo
+El formulario es enviado con método POST.
+Se validan las contraseñas y el correo electrónico.
+Si los datos son válidos, se crea un nuevo usuario con la contraseña hasheada y se guarda en la base de datos.
+Se redirige al usuario al home (/home).
+Si la validación falla, se muestran mensajes de error y el formulario se vuelve a cargar.
+Este controlador sigue el flujo básico para registrar un usuario de manera segura y validar la entrada del formulario.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Entidad Usuario
+La entidad Usuario representa un usuario de tu aplicación. Está configurada para trabajar con Doctrine (el ORM de Symfony). Te explico qué hace cada parte:
+
+Propiedades:
+
+$id: Es la clave primaria de la entidad, que es autogenerada.
+$email: El correo electrónico del usuario.
+$roles: Los roles del usuario, que definen su nivel de acceso. En este caso, siempre se asegura que el usuario tenga el rol ROLE_USER al menos.
+$password: La contraseña hasheada del usuario.
+$nombre: El nombre del usuario.
+$foto_perfil: Opcionalmente, se puede asociar una foto de perfil al usuario.
+Métodos de la clase Usuario:
+
+getId(): Retorna el ID del usuario.
+getEmail() y setEmail(): Métodos para obtener y establecer el email del usuario.
+getRoles() y setRoles(): Métodos para manejar los roles del usuario.
+getPassword() y setPassword(): Métodos para manejar la contraseña del usuario.
+getUserIdentifier(): Este método es parte de la interfaz UserInterface y Symfony lo usa para identificar al usuario, en este caso el email.
+eraseCredentials(): Borra cualquier dato sensible que el usuario haya introducido durante el proceso de autenticación, como una contraseña en texto plano.
+getNombre() y setNombre(): Métodos para acceder y modificar el nombre del usuario.
+getFotoPerfil() y setFotoPerfil(): Métodos para acceder y modificar la foto de perfil del usuario.
+
+Resumen
+El LoginController gestiona el inicio de sesión y la gestión de errores relacionados con la autenticación.
+El RegisterController maneja el registro de nuevos usuarios, incluyendo la validación de contraseñas y email, el hasheo de contraseñas y el almacenamiento 
+del usuario en la base de datos.
+La entidad Usuario representa la información del usuario y se utiliza para interactuar con la base de datos a través de Doctrine.

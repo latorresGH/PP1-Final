@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if app.user %}
+        <h1>Bienvenido, {{ app.user.nombre }}</h1>
+        <p>Estás autenticado con el correo {{ app.user.email }}.</p>
+        <a href="{{ path('app_logout') }}" class="btn btn-danger">Cerrar sesión</a>
+    {% else %}
+        <h1>Bienvenido a la página de inicio</h1>
+        <p>No estás autenticado. <a href="{{ path('app_register') }}">Regístrate</a> o <a href="{{ path('app_login') }}">Inicia sesión</a>.</p>
+    {% endif %}
+{% endblock %}
