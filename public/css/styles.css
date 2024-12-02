@@ -8,13 +8,25 @@
 }
 
 /* Estilos generales para el header */
+body {
+    margin: 0;
+    padding: 0;
+}
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #333;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
     color: white;
     height: 8vh;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    transition: all 0.9s ease;
+}
+
+header.scrolled {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.901) 95%, rgba(0, 0, 0, 0) 100%);
 }
 
 header nav ul {
@@ -23,18 +35,19 @@ header nav ul {
     gap: 2rem;
 }
 
+main {
+    height: 200vh; /* Simula una página con scroll largo */
+    padding: 20px;
+}
+
 header nav ul li {
     display: inline;
 }
 
 header nav ul li a {
     text-decoration: none;
-    color: white;
 }
 
-.tituloHeader {
-    margin-left: 2vw;
-}
 
 .profile-info {
     display: flex;
@@ -85,5 +98,84 @@ header nav ul li a {
     display: flex;
     align-items: center;
     align-content: center;
+    gap: 1.5vh;
     
 }
+
+.contenedorLi {
+    background-color: #16171d;
+    padding: 1.6vh;
+    border-radius: 80px;
+    border: 1px solid #bdbecb25;
+    transition: box-shadow 0.3s ease-in-out; /* Usamos box-shadow para la transición */
+}
+
+.contenedorLi:hover {
+    box-shadow: 0 0 0 1px #bdbecb25; /* Simulamos el borde con un shadow */
+}
+
+
+
+.contenedorLi li a {
+    text-decoration: none;
+    color: rgb(145, 145, 145);
+    transition: color 0.3s ease;
+    margin-left: 0.1vw;
+    margin-right: 0.1vw;
+}
+
+.contenedorLi li a.active {
+    color: rgb(255, 255, 255); /* Texto más claro */
+}
+
+
+.group {
+    display: flex;
+    line-height: 28px;
+    align-items: center;
+    position: relative;
+    max-width: 190px;
+    margin-left: 2vw;
+  }
+  
+  .input {
+    width: 100%;
+    height: 3.4vh;
+    padding-left: 2.5rem;
+    box-shadow: 0 0 0 1.5px #2b2c37, 0 0 25px -17px #000;
+    border: 0;
+    border-radius: 80px;
+    background-color: #16171d;
+    outline: none;
+    color: #bdbecb;
+    transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+    cursor: text;
+    z-index: 0;
+  }
+  
+  .input::placeholder {
+    color: #bdbecb;
+  }
+  
+  .input:hover {
+    box-shadow: 0 0 0 2.5px #2f303d, 0px 0px 25px -15px #000;
+  }
+  
+  .input:active {
+    transform: scale(0.95);
+  }
+  
+  .input:focus {
+    box-shadow: 0 0 0 2.5px #2f303d;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    fill: #bdbecb;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+    z-index: 1;
+  }
+  

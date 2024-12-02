@@ -1,0 +1,25 @@
+{# templates/pelicula/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Agregar Nueva Película</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" required>
+        
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion" required></textarea>
+
+        <label for="duracion">Duración</label>
+        <input type="number" id="duracion" name="duracion" required>
+
+        <label for="imagen">Imagen</label>
+        <input type="file" id="imagen" name="imagen">
+
+        <label for="archivo">Archivo</label>
+        <input type="file" id="archivo" name="archivo">
+
+        <button type="submit">Guardar</button>
+    </form>
+{% endblock %}

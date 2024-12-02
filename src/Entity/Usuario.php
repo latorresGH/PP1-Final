@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UsuarioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -36,6 +38,18 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $foto_perfil = null;
+
+    #[ORM\OneToMany(targetEntity: Favorito::class, mappedBy: 'usuario', cascade: ['persist', 'remove'], fetch: 'LAZY')]
+    private Collection $favoritos;
+
+    #[ORM\OneToMany(targetEntity: VerMasTarde::class, mappedBy: 'usuario', cascade: ['persist', 'remove'], fetch: 'LAZY')]
+    private Collection $verMasTardes;
+
+    public function __construct()
+    {
+        $this->favoritos = new ArrayCollection();
+        $this->verMasTardes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,4 +149,67 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Favorito>
+     */
+    public function getFavoritos(): Collection
+    {
+        return $this->favoritos;
+    }
+
+    public function addFavorito(Favorito $favorito): static
+    {
+        if (!$this->favoritos->contains($favorito)) {
+            $this->favoritos->add($favorito);
+            $favorito->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorito(Favorito $favorito): static
+    {
+        if ($this->favoritos->removeElement($favorito)) {
+            // set the owning side to null (unless already changed)
+            if ($favorito->getUsuario() === $this) {
+                $favorito->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VerMasTarde>
+     */
+    public function getVerMasTardes(): Collection
+    {
+        return $this->verMasTardes;
+    }
+
+    public function addVerMasTarde(VerMasTarde $verMasTarde): static
+    {
+        if (!$this->verMasTardes->contains($verMasTarde)) {
+            $this->verMasTardes->add($verMasTarde);
+            $verMasTarde->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVerMasTarde(VerMasTarde $verMasTarde): static
+    {
+        if ($this->verMasTardes->removeElement($verMasTarde)) {
+            // set the owning side to null (unless already changed)
+            if ($verMasTarde->getUsuario() === $this) {
+                $verMasTarde->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+    
+
+    
 }

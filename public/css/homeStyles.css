@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+* {
+    font-family: "Nunito", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h3, h4,
+a, p  {
+    color: rgb(230, 230, 230);
+}
+
+body {
+    /* background-color: rgb(14, 14, 14); */
+    background-image: url(../imagenes/background1.jpg);
+    background-size: cover;
+}
+
+.tituloContenido {
+    color: rgb(230, 230, 230);
+    margin: 3vh 0 3vh 3vh;
+}
+
+.peliculas-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;  /* Ajusta el tamaño según lo que desees */
+    overflow: hidden; /* Oculta el contenido que se desborda */
+}
+
+.peliculas, .series {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    width: 100%;
+    gap: 20px;  /* Espacio entre cada película */
+    scroll-behavior: smooth; /* Suaviza el desplazamiento */
+    align-items: center;
+    margin-left: 2vw;
+    overflow-y: hidden;  /* Deshabilita el scroll vertical */
+}
+
+/* Ocultar el scroll horizontal */
+.peliculas::-webkit-scrollbar, .series::-webkit-scrollbar {
+    display: none; /* Esto oculta el scroll en Webkit */
+}
+
+.pelicula {
+    position: relative;  /* Esto es necesario para que los botones se posicionen en relación a la película */
+}
+
+.pelicula-image-container img {
+    width: 13vw;
+    height: 36vh;
+    border-radius: 36px;
+    position: relative; /* Para asegurar que los botones se posicionen sobre la imagen */
+    transition: all 0.5s;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.644);
+}
+
+.pelicula-image-container img:hover {
+    filter: brightness(0.4); /* Oscurece la imagen */
+}
+
+/* Posicionamos los botones en la parte superior derecha de la imagen */
+.form-buttons {
+    position: absolute;
+    top: 3vh;   /* Ajusta la distancia desde la parte superior */
+    right: 10px; /* Ajusta la distancia desde el borde derecho */
+    z-index: 10; /* Asegura que los botones estén por encima de la imagen */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;   /* Espacio entre los botones */
+}
+
+.prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    border: none;
+    font-size: 45px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.5s ease;
+}
+
+.prev-btn:hover {
+    background: linear-gradient(to right, black, transparent);
+}
+
+.next-btn:hover {
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.753), transparent);
+}
+
+.prev-btn {
+    height: 100%;
+    left: 0px;
+}
+
+.next-btn {
+    height: 100%;
+    right: 0px;
+}
+
+.form-buttons button,
+.form-buttons svg {
+    background: none;
+    border: none;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+}
+
+.tiempo {
+    display: flex;
+    align-items: center;
+}
+
+.infoSeccion {
+    font-size: 12px;
+    height: 6vh;
+}

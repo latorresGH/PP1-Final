@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ver Más Tarde{% endblock %}
+
+{% block body %}
+    <h1>Ver Más Tarde</h1>
+
+    <ul>
+        {% for item in verMasTarde %}
+            <li>
+                {% if item.pelicula %}
+                    {{ item.pelicula.titulo }} 
+                {% endif %}
+                {% if item.serie %}
+                    {{ item.serie.titulo }} 
+                {% endif %}
+                <a href="{{ path('vermas_eliminar', { 'pelicula_id': item.pelicula ? item.pelicula.id : null, 'serie_id': item.serie ? item.serie.id : null }) }}">Eliminar</a>
+            </li>
+        {% else %}
+            <p>No tienes elementos en tu lista de "Ver Más Tarde".</p>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('home') }}">Volver a la página principal</a>
+{% endblock %}
