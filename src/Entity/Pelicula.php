@@ -42,6 +42,15 @@ class Pelicula
     #[ORM\OneToMany(targetEntity: VerMasTarde::class, mappedBy: 'pelicula')]
     private Collection $verMasTardes;
 
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private ?int $vistas = 0;
+
+    #[ORM\Column]
+    private ?int $contadorFavorito = 0;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $portada = null;
+
     public function __construct()
     {
         $this->favoritos = new ArrayCollection();
@@ -126,6 +135,8 @@ class Pelicula
         if (!$this->favoritos->contains($favorito)) {
             $this->favoritos->add($favorito);
             $favorito->setPelicula($this);
+
+            $this->contadorFavorito++;
         }
 
         return $this;
@@ -137,6 +148,8 @@ class Pelicula
             // set the owning side to null (unless already changed)
             if ($favorito->getPelicula() === $this) {
                 $favorito->setPelicula(null);
+
+                $this->contadorFavorito--;
             }
         }
 
@@ -169,6 +182,48 @@ class Pelicula
                 $verMasTarde->setPelicula(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVistas(): ?int
+    {
+        return $this->vistas;
+    }
+
+    public function setVistas(int $vistas): self
+    {
+        $this->vistas = $vistas;
+
+        return $this;
+    }
+
+    public function incrementarVista(): self
+    {
+        $this->vistas++;
+        return $this;
+    }
+
+    public function getContadorFavorito(): ?int
+    {
+        return $this->contadorFavorito;
+    }
+
+    public function setContadorFavorito(int $contadorFavorito): static
+    {
+        $this->contadorFavorito = $contadorFavorito;
+
+        return $this;
+    }
+
+    public function getPortada(): ?string
+    {
+        return $this->portada;
+    }
+
+    public function setPortada(?string $portada): static
+    {
+        $this->portada = $portada;
 
         return $this;
     }

@@ -38,6 +38,7 @@
                             <img class="profile-icon" src="{% if app.user.fotoPerfil %}{{ asset('uploads/' ~ app.user.fotoPerfil) }}{% else %}https://i2.pngimg.me/thumb/f/720/c3f2c592f9.jpg{% endif %}" alt="Foto de perfil" onclick="toggleMenu()">
                             <div id="dropdown-menu" class="dropdown-menu">
                                 <ul>
+                                    <li><a href="{{ path('favoritos_lista') }}">Mis favoritos</a></li>
                                     <li><a href="#">Ajustes</a></li>
                                     <li><a href="#">Perfil</a></li>
                                     <li><a href="{{ path('app_logout') }}">Cerrar sesión</a></li>

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel de Administración - Películas{% endblock %}
+
+{% block body %}
+
+<h1>Películas - Panel de Administración</h1>
+
+<h2>Películas</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Vistas</th>
+            <th>Favoritos</th>  <!-- Columna para mostrar los favoritos -->
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pelicula in peliculas %}
+            <tr>
+                <td>{{ pelicula.titulo }}</td>
+                <td>{{ pelicula.descripcion }}</td>
+                <td>{{ pelicula.vistas }}</td>
+                <td>{{ pelicula.contadorFavorito }}</td>  <!-- Aquí mostramos el contador de favoritos -->
+                <td>
+                    <!-- Aquí se agregarían las acciones (editar, eliminar, etc.) -->
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

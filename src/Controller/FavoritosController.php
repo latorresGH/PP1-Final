@@ -66,9 +66,20 @@ class FavoritosController extends AbstractController
         // En caso de error, redirigimos a la página de error
         return $this->redirectToRoute('error_page');
     }
-    
-    
-       
+      
+    // Controlador
+
+    public function panelAdministrador(): Response
+    {
+        // Obtener las películas
+        $peliculas = $this->getDoctrine()->getRepository(Pelicula::class)->findAll();
+        
+        // Pasar las películas al Twig (el contador de favoritos está en la entidad)
+        return $this->render('admin/adminPanel.html.twig', [
+            'peliculas' => $peliculas,
+        ]);
+    }
+
         
     private function obtenerParametros(Request $request): array
     {

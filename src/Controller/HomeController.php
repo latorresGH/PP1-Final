@@ -24,4 +24,5 @@ class HomeController extends AbstractController
             'series' => $series,
         ]);
     }
+    
 }
