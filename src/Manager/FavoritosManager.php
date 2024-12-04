@@ -8,6 +8,7 @@ use App\Entity\Pelicula;
 use App\Entity\Serie;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 class FavoritosManager
@@ -23,6 +24,7 @@ class FavoritosManager
 
     public function agregarFavorito(Usuario $usuario, $peliculaId, $serieId)
     {
+
         $favorito = new Favorito();
         $favorito->setUsuario($usuario);
     
@@ -32,13 +34,16 @@ class FavoritosManager
             // Aquí agregamos el favorito a la película
             $pelicula->addFavorito($favorito);  // Asegúrate de llamar a addFavorito de la entidad
         }
-
+        
         if ($serieId) {
             $serie = $this->entityManager->getRepository(Serie::class)->find($serieId);
-            if ($serie) {
-                $favorito->setSerie($serie); // Asumiendo que tienes este método en Favorito
+            if (!$serie) {
+                // Lanza una excepción si no se encuentra la serie
+                throw new NotFoundHttpException('Serie no encontrada');
             }
-        }//VEREMOS DE DEJARLO O SACARLO
+            $favorito->setSerie($serie);  // Asignamos la serie a Favorito
+        }
+        
         
         $favorito->setFechaAgregado(new \DateTime());
 

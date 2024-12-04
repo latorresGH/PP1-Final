@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+* {
+    font-family: "Nunito", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    width: 100%;
+}
+
+.container {
+    display: flex; /* Divide el contenedor en dos columnas */
+    height: 100vh; /* Altura completa de la pantalla */
+}
+
+.centrarTabla {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Barra de navegación */
+.sidebar {
+    position: sticky; /* Hace que la barra de navegación sea sticky */
+    top: 0; /* Se pega al borde superior del viewport */
+    height: 100vh; /* Ocupa toda la altura del viewport */
+    overflow-y: auto; /* Añade un scroll interno si el contenido es más grande */
+    width: 14%; /* Ancho fijo para la barra */
+    background-color: #f4f4f4; /* Fondo claro */
+    border-right: 1px solid #ddd; /* Borde de separación */
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 1; /* Asegura que esté por encima del contenido principal */
+}
+
+
+.sidebar h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin: 10px 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.sidebar a:hover {
+    color: #007BFF; /* Cambia el color al pasar el ratón */
+}
+
+.main {
+    display: flex;
+    justify-content: flex-end;
+}
+
+table {
+    width: 70vw;
+    border-collapse: collapse;
+    table-layout: fixed;  /* Esto asegura que el tamaño de las celdas sea fijo */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    position: relative;
+    white-space: nowrap;
+    min-width: 50px; /* Asegúrate de que no se vuelvan más pequeñas que este tamaño */
+}
+
+
+th {
+    background-color: #f4f4f4;
+    cursor: pointer;
+}
+
+.resizable {
+    position: relative;
+    min-width: 150px; /* Establecer un mínimo para la celda */
+}
+
+.resizable .contenedor-texto {
+    overflow: hidden;  /* Ocultar el contenido extra si se desborda */
+    text-overflow: ellipsis;  /* Poner '...' si se desborda el texto */
+    white-space: nowrap;  /* Impide que el texto se divida en varias líneas */
+}
+
+.tdBotonImagen {
+    background-color: black;
+    border: 1px solid white;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.botonImagen {
+    text-decoration: none;
+    text-align: center;
+}
+
+.imagen {
+    opacity: 0;
+    width: 0;
+}
+
+.contenedor-texto {
+    width: 100%; /* El contenido ocupará el 100% de la celda */
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.resizable .resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 10px;
+    height: 100%;
+    cursor: ew-resize;
+    background-color: #333;
+}
+
+.sort-arrow {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+.sort-arrow.asc:before {
+    content: '↑'; /* Flecha hacia arriba */
+}
+
+.sort-arrow.desc:before {
+    content: '↓'; /* Flecha hacia abajo */
+}

@@ -125,3 +125,52 @@ body {
     font-size: 12px;
     height: 6vh;
 }
+
+.peliculasMasVistasContenedor {
+    display: flex;
+    gap: 0.4vw;
+    padding: 0 1vw;
+    align-items: center;
+}
+
+.peliculaCajaBackground {
+    position: relative;
+    height: 32vh;
+    width: 24vw;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+/* Contenedor de la imagen de fondo */
+.imagen-background {
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.5s;
+}
+
+/* Efecto de oscurecimiento solo a la imagen */
+.peliculaCajaBackground:hover .imagen-background {
+    filter: brightness(0.4); /* Oscurece solo la imagen */
+}
+
+/* Información sobre la película */
+.pelicula-info {
+    position: absolute;
+    top: 50%; /* Centra verticalmente */
+    left: 50%; /* Centra horizontalmente */
+    transform: translate(-50%, -50%); /* Ajusta para un perfecto centrado */
+    color: white;
+    padding: 10px;
+    opacity: 0; /* Inicialmente invisible */
+    transition: opacity 0.3s ease; /* Efecto de transición */
+}
+
+
+/* Mostrar información al pasar el mouse */
+.peliculaCajaBackground:hover .pelicula-info {
+    opacity: 1; /* Hace visible la información */
+}
+

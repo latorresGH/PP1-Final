@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+
+use App\Entity\Pelicula;
 use App\Entity\Usuario;
 use App\Manager\FavoritosManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,14 +11,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 class FavoritosController extends AbstractController
 {
     private FavoritosManager $favoritosManager;
+    private EntityManagerInterface $entityManager;
     // private $logger;
     
 
-    public function __construct(FavoritosManager $favoritosManager)
+    public function __construct(EntityManagerInterface $entityManager, FavoritosManager $favoritosManager)
     {
         $this->favoritosManager = $favoritosManager;
         // $this->logger = $logger;
@@ -72,13 +76,14 @@ class FavoritosController extends AbstractController
     public function panelAdministrador(): Response
     {
         // Obtener las películas
-        $peliculas = $this->getDoctrine()->getRepository(Pelicula::class)->findAll();
-        
-        // Pasar las películas al Twig (el contador de favoritos está en la entidad)
+        $peliculas = $this->entityManager->getRepository(Pelicula::class)->findAll();
+
+        // Pasar las películas y el conteo de favoritos al Twig
         return $this->render('admin/adminPanel.html.twig', [
             'peliculas' => $peliculas,
         ]);
     }
+
 
         
     private function obtenerParametros(Request $request): array
