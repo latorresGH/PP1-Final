@@ -1,0 +1,147 @@
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/adminStyles.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <!-- Barra de navegación -->
+    <nav class="sidebar">
+        <h2>Administración</h2>
+        <ul>
+            <li><a href="{{ path('home') }}">Inicio</a></li>
+            <li><a href="{{ path('admin_peliculas') }}">Películas</a></li>
+            <li><a href="{{ path('admin_series') }}">Series</a></li>
+            <li><a href="#">Usuarios</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+
+<h1>Películas - Panel de Administración</h1>
+
+<div class="centrarTabla">
+
+<div class="navbar"></div>
+
+<div class="main">
+
+<table class="peliculas-table">
+    <thead>
+        <tr>
+            <th class="resizable">Título <div class="resizer"></div></th>
+            <th class="resizable">Descripción <div class="resizer"></div></th>
+            <th class="resizable">Duración <div class="resizer"></div></th>
+            <th class="resizable">Imagen <div class="resizer"></div></th>
+            <th class="resizable">Vistos <div class="resizer"></div></th>
+            <th class="resizable">Favoritos <div class="resizer"></div></th>
+            <th class="resizable">Portada <div class="resizer"></div></th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pelicula in peliculas %}
+            <tr>
+                <td class="descripcion resizable">
+                    <div class="contenedor-texto">{{ pelicula.titulo }}</div>
+                </td>
+                
+                <td class="descripcion resizable">
+                    <div class="contenedor-texto">{{ pelicula.descripcion }}</div>
+                </td>
+
+                <td>
+                    <div class="contenedor-texto">{{ pelicula.duracion }} minutos
+                </td>
+
+                <td class="resizable">
+                    <a class="contenedor-texto" href="{{ asset(pelicula.imagen) }}" target="_blank">
+                        <img class="imagen" src="{{ asset(pelicula.imagen) }}" alt="Imagen de {{ pelicula.titulo }}" width="50">
+                    </a>
+                </td>
+                
+                <td class="descripcion resizable">
+                    <div class="contenedor-texto">{{ pelicula.vistas }}</div>
+                </td>
+
+                <td class="descripcion resizable">
+                    <div class="contenedor-texto">{{ pelicula.contadorFavorito }}</div>
+                </td>
+
+                <td class="descripcion resizable">
+                    <div class="contenedor-texto"><img src="{{ asset(pelicula.portada is not null ? pelicula.portada : 'images/default.jpg') }}" alt="Portada de {{ pelicula.titulo }}" width="50"></div>
+                </td>
+                <td>
+                        <!-- Botón de editar -->
+                    <button class="btn-modificar">
+                        <a href="{{ path('peliculas_edit', { 'id': pelicula.id }) }}"
+                        class="{{ app.request.get('_route') == 'peliculas_edit' ? 'active' : '' }}">
+                            Editar
+                        </a>
+                    </button>
+                    <!-- Botón de eliminar -->
+                    <button class="btn-eliminar">
+                        <a href="{{ path('peliculas_delete', { 'id': pelicula.id }) }}"
+                        class="{{ app.request.get('_route') == 'peliculas_delete' ? 'active' : '' }}">
+                            Eliminar
+                        </a>
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+    </main>
+</div>
+</div>
+
+<script>
+document.querySelectorAll('.resizable').forEach(function (headerCell) {
+    const resizer = headerCell.querySelector('.resizer');
+    let isResizing = false;
+    let lastDownX = 0;
+    let startWidth = 0;
+
+    resizer.addEventListener('mousedown', function (e) {
+        isResizing = true;
+        lastDownX = e.clientX;
+        startWidth = headerCell.offsetWidth;
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    });
+
+    function handleMouseMove(e) {
+        if (!isResizing) return;
+
+        // Cálculo del movimiento en X (horizontal)
+        const offset = e.clientX - lastDownX;
+
+        // Aplicar el cambio de tamaño basado en el desplazamiento
+        const newWidth = startWidth + offset;
+
+        // Asegurarnos de que el nuevo tamaño no sea menor a 50px
+        if (newWidth > 50) {
+            headerCell.style.width = newWidth + 'px';
+            
+            // Aquí sincronizamos las celdas de la columna con el cambio de tamaño
+            const columnIndex = Array.from(headerCell.parentElement.children).indexOf(headerCell);
+            document.querySelectorAll('tbody tr').forEach(function(row) {
+                const td = row.children[columnIndex];
+                td.style.width = newWidth + 'px';
+            });
+        }
+    }
+
+    function handleMouseUp() {
+        isResizing = false;
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+    }
+});
+
+</script>
+
+{% endblock %}

@@ -53,12 +53,15 @@
                     </div>
                 {% endif %}
             {% endfor %}
+            <button class="next-btn" onclick="moveScroll(1, '.favoritos')">&#10095;</button>
         {% endif %}
     </div>
-
 </div>
+
             <h2 class="tituloContenido">Series Favoritas</h2>
-    <div class="favoritos">
+    <div class="favoritas-container">
+    <button class="prev-btn" onclick="moveScroll(-1, '.favoritosSeries')">&#10094;</button>
+    <div class="favoritosSeries">
         {% if favoritos is not empty %}
             {% for favorito in favoritos %}
                 {% if favorito.serie %}
@@ -94,6 +97,7 @@
                                         </svg>
                                     </button>
                                 </form>
+
                             </div>
                         </div>
                     </div>
@@ -101,6 +105,8 @@
             {% endfor %}
         {% endif %}
     </div>
+    <button class="next-btn" onclick="moveScroll(1, '.favoritosSeries')">&#10095;</button>
+</div>
         <script>
         function moveScroll(direction, target) {
             const container = document.querySelector(target);  // Selecciona el contenedor basado en el parámetro 'target'

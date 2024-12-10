@@ -1,20 +1,83 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}{{ pelicula.titulo }}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/verPeliculaStyle.css') }}">
+{% endblock %}
 
 {% block body %}
-    <div class="pelicula">
-        <h1>{{ pelicula.titulo }}</h1>
-        <p>{{ pelicula.descripcion }}</p>
 
-        <div class="reproductor">
-            <video controls width="800">
-                <source src="{{ asset(pelicula.archivo) }}" type="video/mp4">
-                Tu navegador no soporta reproducción de video.
-            </video>
+    <div class="contenedor-video">
+        <video id="video">
+            <source src="{{ asset(pelicula.archivo) }}" type="video/mp4">
+            Tu navegador no soporta reproducción de video.
+        </video>
+        <div class="controles">
+            <div class="titulo">{{ pelicula.titulo }}</div>
+            <div class="contenedor-tiempo">
+                <span id="tiempoActual">0:00</span> / <span id="tiempoTotal">0:00</span>
+            </div>
+            <input type="range" id="barraProgreso" class="barra-progreso" min="0" max="100" value="0">
+            <button id="btnReproducirPausar" class="boton-reproducir-pausar">
+                <svg id="iconoReproducir" viewBox="0 0 24 24"><path d="M21.4086 9.35258C23.5305 10.5065 23.5305 13.4935 21.4086 14.6474L8.59662 21.6145C6.53435 22.736 4 21.2763 4 18.9671L4 5.0329C4 2.72368 6.53435 1.26402 8.59661 2.38548L21.4086 9.35258Z"></path></svg>
+                <svg id="iconoPausar" style="display: none;" viewBox="0 0 24 24"><path d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2C7.88562 2 8.82843 2 9.41421 2.58579C10 3.17157 10 4.11438 10 6V18C10 19.8856 10 20.8284 9.41421 21.4142C8.82843 22 7.88562 22 6 22C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V6Z"></path><path d="M14 6C14 4.11438 14 3.17157 14.5858 2.58579C15.1716 2 16.1144 2 18 2C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6V18C22 19.8856 22 20.8284 21.4142 21.4142C20.8284 22 19.8856 22 18 22C16.1144 22 15.1716 22 14.5858 21.4142C14 20.8284 14 19.8856 14 18V6Z"></path></svg>
+            </button>
+            <button id="btnPantallaCompleta" class="boton-pantalla-completa">
+                <svg viewBox="0 0 24 24"><path d="M2 9V6.5C2 4.01 4.01 2 6.5 2H9" stroke="#e8e8e8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15 2H17.5C19.99 2 22 4.01 22 6.5V9" stroke="#e8e8e8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M22 16V17.5C22 19.99 19.99 22 17.5 22H16" stroke="#e8e8e8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9 22H6.5C4.01 22 2 19.99 2 17.5V15" stroke="#e8e8e8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
         </div>
-
-
-        <a href="{{ path('home') }}" class="btn btn-primary">Volver al listado</a>
+        <a href="{{ path('home') }}" class="boton-regresar controles"><svg fill="#e8e8e8" version="1.1" baseProfile="tiny" viewBox="0 0 42 42"><polygon fill-rule="evenodd" points="27.066,1 7,21.068 26.568,40.637 31.502,35.704 16.865,21.068 32,5.933 "></polygon></svg></a>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('video');
+            const playPauseBtn = document.getElementById('btnReproducirPausar');
+            const playIcon = document.getElementById('iconoReproducir');
+            const pauseIcon = document.getElementById('iconoPausar');
+            const fullscreenBtn = document.getElementById('btnPantallaCompleta');
+            const progressBar = document.getElementById('barraProgreso');
+            const currentTimeElement = document.getElementById('tiempoActual');
+            const totalTimeElement = document.getElementById('tiempoTotal');
+
+            playPauseBtn.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play();
+                    playIcon.style.display = 'none';
+                    pauseIcon.style.display = 'block';
+                } else {
+                    video.pause();
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                }
+            });
+
+            fullscreenBtn.addEventListener('click', () => {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.webkitRequestFullscreen) {
+                    video.webkitRequestFullscreen();
+                } else if (video.msRequestFullscreen) {
+                    video.msRequestFullscreen();
+                }
+            });
+
+            const formatTime = (timeInSeconds) => {
+                const minutes = Math.floor(timeInSeconds / 60);
+                const seconds = Math.floor(timeInSeconds % 60);
+                return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            };
+
+            video.addEventListener('timeupdate', () => {
+                currentTimeElement.textContent = formatTime(video.currentTime);
+                progressBar.value = (video.currentTime / video.duration) * 100 || 0;
+            });
+
+            video.addEventListener('loadedmetadata', () => {
+                totalTimeElement.textContent = formatTime(video.duration);
+            });
+
+            progressBar.addEventListener('input', () => {
+                video.currentTime = (progressBar.value / 100) * video.duration;
+            });
+        });
+    </script>
+
 {% endblock %}

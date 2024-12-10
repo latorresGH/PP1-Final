@@ -24,8 +24,8 @@
                 <nav>
                     <ul class="contenedorLi">
                         <li><a href="{{ path('home') }}" class="{{ app.request.get('_route') == 'app_home' ? 'active' : '' }}">Inicio</a></li>
-                        <li><a href="#" class="{{ app.request.get('_route') == 'ruta_peliculas' ? 'active' : '' }}">Películas</a></li>
-                        <li><a href="#" class="{{ app.request.get('_route') == 'ruta_series' ? 'active' : '' }}">Series</a></li>
+                        <li><a href="{{ path('app_peliculas') }}" class="{{ app.request.get('_route') == 'ruta_peliculas' ? 'active' : '' }}">Películas</a></li>
+                        <li><a href="{{ path('app_series') }}" class="{{ app.request.get('_route') == 'ruta_series' ? 'active' : '' }}">Series</a></li>
                         <li><a href="{{ path('vermas_lista') }}" class="{{ app.request.get('_route') == 'vermas_lista' ? 'active' : '' }}">Ver más tarde</a></li>
                     </ul>
                 </nav>

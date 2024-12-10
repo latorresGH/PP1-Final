@@ -30,10 +30,9 @@ body {
     overflow: hidden; /* Oculta el contenido que se desborda */
 }
 
-.favoritos {
+.favoritos, .favoritosSeries {
     display: flex;
     flex-wrap: nowrap;
-    overflow-x: scroll;
     width: 100%;
     gap: 20px;  /* Espacio entre cada película */
     scroll-behavior: smooth; /* Suaviza el desplazamiento */

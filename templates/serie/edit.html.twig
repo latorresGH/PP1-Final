@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/editarSerieStyle.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h2>Editar Serie: {{ serie.titulo }}</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="form-editar-serie">
+        <label for="titulo">Título</label>
+        <input type="text" id="titulo" name="titulo" value="{{ serie.titulo }}" required>
+        
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion" required>{{ serie.descripcion }}</textarea>
+
+        <label for="temporadas">Número de Temporadas</label>
+        <input type="number" id="temporadas" name="temporadas" value="{{ serie.temporadas }}" required>
+
+         <label for="duracion_estimada">Duracion estimada</label>
+        <input type="number" id="duracion" name="duracion" value="{{ serie.duracion }}" required>
+
+        <label for="imagen">Imagen</label>
+        <input type="file" id="imagen" name="imagen">
+
+        <label for="portada">Portada</label>
+        <input type="file" id="portada" name="portada">
+
+        <button type="submit" class="btn-guardar">Guardar cambios</button>
+    </form>
+{% endblock %}

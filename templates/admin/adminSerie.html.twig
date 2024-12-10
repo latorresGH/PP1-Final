@@ -1,0 +1,96 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/adminStyles.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <!-- Barra de navegación -->
+    <nav class="sidebar">
+        <h2>Administración</h2>
+        <ul>
+            <li><a href="{{ path('home') }}">Inicio</a></li>
+            <li><a href="{{ path('admin_peliculas') }}">Películas</a></li>
+            <li><a href="{{ path('admin_series') }}">Series</a></li>
+            <li><a href="#">Usuarios</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+
+        <h1>Series - Panel de Administración</h1>
+
+        <div class="centrarTabla">
+            <div class="navbar"></div>
+            <div class="main">
+                <table class="series-table">
+                    <thead>
+                        <tr>
+                            <th class="resizable">Título <div class="resizer"></div></th>
+                            <th class="resizable">Descripción <div class="resizer"></div></th>
+                            <th class="resizable">Temporadas <div class="resizer"></div></th>
+                            <th class="resizable">Imagen <div class="resizer"></div></th>
+                            <th class="resizable">Vistos <div class="resizer"></div></th>
+                            <th class="resizable">Favoritos <div class="resizer"></div></th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for serie in series %}
+                            <tr>
+                                <td class="descripcion resizable">
+                                    <div class="contenedor-texto">{{ serie.titulo }}</div>
+                                </td>
+                                
+                                <td class="descripcion resizable">
+                                    <div class="contenedor-texto">{{ serie.descripcion }}</div>
+                                </td>
+
+                                <td>
+                                    <div class="contenedor-texto">{{ serie.temporadas }}</div>
+                                </td>
+
+                                <td class="resizable">
+                                    <a class="contenedor-texto" href="{{ asset(serie.imagen) }}" target="_blank">
+                                        <img class="imagen" src="{{ asset(serie.imagen) }}" alt="Imagen de {{ serie.titulo }}" width="50">
+                                    </a>
+                                </td>
+                                
+                                <td class="descripcion resizable">
+                                    <div class="contenedor-texto">{{ serie.vistas }}</div>
+                                </td>
+
+                                <td class="descripcion resizable">
+                                    <div class="contenedor-texto">{{ serie.contadorFavorito }}</div>
+                                </td>
+
+                                <td>
+                                    <!-- Botón de editar -->
+                                    <button class="btn-modificar">
+                                        <a href="{{ path('series_edit', { 'id': serie.id }) }}"
+                                           class="{{ app.request.get('_route') == 'series_edit' ? 'active' : '' }}">
+                                            Editar
+                                        </a>
+                                    </button>
+                                    <!-- Botón de eliminar -->
+                                    <button class="btn-eliminar">
+                                        <a href="{{ path('series_delete', { 'id': serie.id }) }}"
+                                           class="{{ app.request.get('_route') == 'series_delete' ? 'active' : '' }}">
+                                            Eliminar
+                                        </a>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+// El script de resizable es el mismo que el de películas
+</script>
+
+{% endblock %}

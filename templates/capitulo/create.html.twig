@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Agregar Capítulo a la Serie: {{ serie.titulo }}</h2>
+
+    <form action="{{ path('capitulo_create', {'serieId': serie.id}) }}" method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="titulo">Título del Capítulo:</label>
+            <input type="text" id="titulo" name="titulo" required>
+        </div>
+
+        <div>
+            <label for="archivo">Archivo del Capítulo:</label>
+            <input type="file" id="archivo" name="archivo" accept="video/*" required>
+        </div>
+
+        <button type="submit">Agregar Capítulo</button>
+    </form>
+
+    <br>
+    {# <a href="{{ path('serie_show', {'id': serie.id}) }}">Volver a la serie</a> #}
+{% endblock %}

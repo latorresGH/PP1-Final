@@ -1,25 +1,88 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ver Más Tarde{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/favoritoStyles.css') }}">
+{% endblock %}
 
 {% block body %}
-    <h1>Ver Más Tarde</h1>
+    <h2 class="tituloContenido">Ver Más Tarde</h2>
+    <div class="favoritas-container">
+        <button class="prev-btn" onclick="moveScroll(-1, '.favoritos')">&#10094;</button>
+        <div class="favoritos">
+            {% if verMasTarde is not empty %}
+                {% for item in verMasTarde %}
+                    <div class="favorito">
+                        <div class="favorito-imagen-container">
+                            {% if item.pelicula %}
+                                <img src="{{ asset(item.pelicula.imagen ? item.pelicula.imagen : 'default.jpg') }}" 
+                                     alt="{{ item.pelicula.titulo }}" 
+                                     class="favorito-imagen">
+                                <div class="infoSeccion">
+                                    <h3>{{ item.pelicula.titulo }}</h3>
+                                    <p class="tiempo">
+                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                            <g id="SVGRepo_iconCarrier">
+                                                <path d="M12 7V12L14.5 10.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </g>
+                                        </svg>
+                                        {{ item.pelicula.duracion }} minutos
+                                    </p>
+                                </div>
+                            {% elseif item.serie %}
+                                <img src="{{ asset(item.serie.imagen ? item.serie.imagen : 'default.jpg') }}" 
+                                     alt="{{ item.serie.titulo }}" 
+                                     class="favorito-imagen">
+                                <div class="infoSeccion">
+                                    <h3>{{ item.serie.titulo }}</h3>
+                                    <p class="tiempo">
+                                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                            <g id="SVGRepo_iconCarrier">
+                                                <path d="M12 7V12L14.5 10.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </g>
+                                        </svg>
+                                        {{ item.serie.duracion }} minutos
+                                    </p>
+                                </div>
+                            {% endif %}
 
-    <ul>
-        {% for item in verMasTarde %}
-            <li>
-                {% if item.pelicula %}
-                    {{ item.pelicula.titulo }} 
-                {% endif %}
-                {% if item.serie %}
-                    {{ item.serie.titulo }} 
-                {% endif %}
-                <a href="{{ path('vermas_eliminar', { 'pelicula_id': item.pelicula ? item.pelicula.id : null, 'serie_id': item.serie ? item.serie.id : null }) }}">Eliminar</a>
-            </li>
-        {% else %}
-            <p>No tienes elementos en tu lista de "Ver Más Tarde".</p>
-        {% endfor %}
-    </ul>
+                            <div class="form-buttons">
+                                <form method="post" action="{{ path('vermas_eliminar', { 'pelicula_id': item.pelicula ? item.pelicula.id : null, 'serie_id': item.serie ? item.serie.id : null }) }}">
+                                    <button type="submit">
+                                        <svg width="256px" height="256px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                            <g id="SVGRepo_iconCarrier">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                            </g>
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <button class="next-btn" onclick="moveScroll(1, '.favoritos')">&#10095;</button>
+            {% else %}
+                <p>No tienes elementos en tu lista de "Ver Más Tarde".</p>
+            {% endif %}
+        </div>
+    </div>
 
-    <a href="{{ path('home') }}">Volver a la página principal</a>
+    <script>
+        function moveScroll(direction, target) {
+            const container = document.querySelector(target);  // Selecciona el contenedor basado en el parámetro 'target'
+            const scrollAmount = 1200;  // Cantidad de desplazamiento en píxeles por cada clic
+
+            container.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+
 {% endblock %}

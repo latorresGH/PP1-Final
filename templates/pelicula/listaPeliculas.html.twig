@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/homeStyles.css') }}">
+{% endblock %}
+
+{% block body %}
+
+
+    <h2 class="tituloContenido">Peliculas mas vistas</h2>
+<div class="peliculasMasVistasContenedor">
+    {% for pelicula in peliculasMasVistas %}
+        <div class="pelicula">
+            <a href="{{ path('peliculas_ver', { id: pelicula.id }) }}">
+                <div class="peliculaCajaBackground">
+                    <div class="imagen-background" style="background-image: url('{{ pelicula.portada }}');"></div>
+                        <div class="pelicula-info">
+                            <h2>{{ pelicula.titulo }}</h2>
+                        </div>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+
+    <h2 class="tituloContenido">Películas</h2>
+
+ <div class="peliculas-container">
+    <button class="prev-btn" onclick="moveScroll(-1, '.peliculas')">&#10094;</button>
+    <div class="peliculas">
+        {% for pelicula in peliculas %}
+            <div class="pelicula">
+                <div class="pelicula-image-container">
+                    <a href="{{ path('peliculas_ver', { id: pelicula.id }) }}">
+                        <img src="{{ asset(pelicula.imagen) }}" alt="{{ pelicula.titulo }}" class="pelicula-imagen">
+                    </a>
+                    
+                    <div class="infoSeccion">
+                        <h3>{{ pelicula.titulo }}</h3>
+                        <p class="tiempo"><svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 7V12L14.5 10.5M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg> {{ pelicula.duracion }}m</p>
+                    </div>
+                    <!-- Contenedor para los botones -->
+                    <div class="form-buttons">
+                        <form action="{{ path('vermas_agregar') }}" method="post">
+                            <input type="hidden" name="pelicula_id" value="{{ pelicula.id }}">
+                            <button type="submit" class="btn btn-success"><svg width="256px" height="256px" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M512 1024C229.7 1024 0 794.3 0 512S229.7 0 512 0s512 229.7 512 512-229.7 512-512 512z m0-938.7C276.7 85.3 85.3 276.7 85.3 512S276.7 938.7 512 938.7 938.7 747.3 938.7 512 747.3 85.3 512 85.3z" fill="#ffffff"></path><path d="M682.7 554.7H341.3c-23.6 0-42.7-19.1-42.7-42.7s19.1-42.7 42.7-42.7h341.3c23.6 0 42.7 19.1 42.7 42.7s-19.1 42.7-42.6 42.7z" fill="#d6d6d6"></path><path d="M512 725.3c-23.6 0-42.7-19.1-42.7-42.7V341.3c0-23.6 19.1-42.7 42.7-42.7s42.7 19.1 42.7 42.7v341.3c0 23.6-19.1 42.7-42.7 42.7z" fill="#d6d6d6"></path></g></svg></button>
+                        </form>
+
+                        <form action="{{ path('favoritos_agregar') }}" method="post">
+                            <input type="hidden" name="pelicula_id" value="{{ pelicula.id }}">
+                            <button type="submit" class="btn btn-warning"><svg width="256px" height="256px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>No hay películas disponibles en este momento.</p>
+        {% endfor %}
+    </div>
+    <button class="next-btn" onclick="moveScroll(1, '.peliculas')">&#10095;</button>
+</div>
+
+    <script>
+        function moveScroll(direction, target) {
+            const container = document.querySelector(target);  // Selecciona el contenedor basado en el parámetro 'target'
+            const scrollAmount = 1200;  // Cantidad de desplazamiento en píxeles por cada clic
+
+            container.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+
+{% endblock %}

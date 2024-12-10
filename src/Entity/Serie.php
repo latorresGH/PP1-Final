@@ -32,6 +32,12 @@ class Serie
 
     #[ORM\Column(length: 255)]
     private ?string $archivo = null;
+    
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private ?int $vistas = 0;
+
+    #[ORM\Column]
+    private ?int $contadorFavorito = 0;
 
     /**
      * @var Collection<int, Favorito>
@@ -45,10 +51,15 @@ class Serie
     #[ORM\OneToMany(targetEntity: VerMasTarde::class, mappedBy: 'serie')]
     private Collection $verMasTardes;
 
+
+    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Capitulo::class)]
+    private $capitulos;
+
     public function __construct()
     {
         $this->favoritos = new ArrayCollection();
         $this->verMasTardes = new ArrayCollection();
+        $this->capitulos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +139,18 @@ class Serie
         return $this;
     }
 
+    public function getContadorFavorito(): ?int
+    {
+        return $this->contadorFavorito;
+    }
+
+    public function setContadorFavorito(int $contadorFavorito): static
+    {
+        $this->contadorFavorito = $contadorFavorito;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Favorito>
      */
@@ -141,6 +164,8 @@ class Serie
         if (!$this->favoritos->contains($favorito)) {
             $this->favoritos->add($favorito);
             $favorito->setSerie($this);
+
+            $this->contadorFavorito++;
         }
 
         return $this;
@@ -152,6 +177,8 @@ class Serie
             // set the owning side to null (unless already changed)
             if ($favorito->getSerie() === $this) {
                 $favorito->setSerie(null);
+
+                $this->contadorFavorito--;
             }
         }
 
@@ -187,4 +214,28 @@ class Serie
 
         return $this;
     }
+
+    public function getVistas(): ?int
+    {
+        return $this->vistas;
+    }
+
+    public function setVistas(int $vistas): self
+    {
+        $this->vistas = $vistas;
+
+        return $this;
+    }
+
+    public function incrementarVista(): self
+    {
+        $this->vistas++;
+        return $this;
+    }
+
+    public function getCapitulos(): Collection
+    {
+        return $this->capitulos;
+    }
+
 }

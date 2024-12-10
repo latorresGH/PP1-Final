@@ -42,6 +42,7 @@ class FavoritosManager
                 throw new NotFoundHttpException('Serie no encontrada');
             }
             $favorito->setSerie($serie);  // Asignamos la serie a Favorito
+            $serie->addFavorito($favorito); 
         }
         
         
@@ -62,24 +63,27 @@ class FavoritosManager
             return new Response('Favorito no encontrado', Response::HTTP_NOT_FOUND);
         }
     
-        // Obtener la película asociada al favorito
+        // Obtener la película y la serie asociadas al favorito
         $pelicula = $favorito->getPelicula();
-        
+        $serie = $favorito->getSerie();
+    
         // Si existe una película asociada, decrementamos el contador
         if ($pelicula) {
             $pelicula->removeFavorito($favorito);
-            $pelicula->removeFavorito($favorito);
+        }
+    
+        // Si existe una serie asociada, decrementamos el contador
+        if ($serie) {
+            $serie->removeFavorito($favorito);
         }
     
         // Eliminar el favorito
         $this->entityManager->remove($favorito);
         $this->entityManager->flush();
-        
+    
         return new Response('Favorito eliminado con éxito', Response::HTTP_OK);
     }
-    
-    
-    
+           
 
     public function obtenerFavoritos(Usuario $usuario)
     {

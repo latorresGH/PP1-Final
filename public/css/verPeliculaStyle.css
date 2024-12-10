@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+* {
+    font-family: "Nunito", sans-serif;
+}
+
+body {
+    margin: 0; /* Elimina cualquier margen predeterminado */
+    overflow: hidden; /* Evita que aparezca el scroll */
+}
+
+html, body {
+    height: 100%; /* Asegura que el body y html ocupen toda la altura de la ventana */
+}
+
+.contenedor-video {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.controles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0; /* Ocultar controles por defecto */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.contenedor-video:hover .controles {
+    opacity: 1; /* Mostrar controles al hacer hover */
+}
+
+.titulo {
+    pointer-events: auto;
+    margin: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+}
+
+.boton-reproducir-pausar {
+    bottom: 1vh;
+    right: 49%;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.boton-regresar {
+    position: absolute;
+    top: 20px;
+    left: 5px;
+    width: 45px;
+    height: 45px;
+    background: none;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    pointer-events: auto;
+}
+
+.boton-pantalla-completa {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.contenedor-tiempo {
+    color: white;
+    position: absolute;
+    bottom: 20px;
+    left: 15px;
+}
+
+#iconoReproducir, #iconoPausar {
+    width: 100%;
+    height: 100%;
+    fill: white;
+}
+
+.boton-primario {
+    position: absolute;
+    top: 20px;
+    left: 5px;
+    width: 45px;
+    height: 45px;
+    background: none;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    pointer-events: auto;
+}
+
+.barra-progreso {
+    position: absolute;
+    bottom: 8%;
+    width: 100%;
+    height: 5px;
+    appearance: none;
+    background: #444;
+    cursor: pointer;
+    border-radius: 5px;
+    pointer-events: auto;
+}
+
+.barra-progreso::-webkit-slider-thumb {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.barra-progreso::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+}

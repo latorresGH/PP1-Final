@@ -78,7 +78,6 @@ class PeliculaController extends AbstractController
         return $this->render('pelicula/new.html.twig');
     }
     
-    
 
     #[Route('/peliculas/{id}/editar', name: 'peliculas_edit')]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager, PeliculaRepository $peliculaRepository): Response

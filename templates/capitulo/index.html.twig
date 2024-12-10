@@ -1,0 +1,21 @@
+{# templates/capitulo/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Capítulos de la serie: {{ serie.titulo }}</h2>
+
+    {% if serie.capitulos is empty %}
+        <p>No hay capítulos disponibles para esta serie.</p>
+    {% else %}
+        <ul>
+            {% for capitulo in serie.capitulos %}
+                <li>
+                    <strong>{{ capitulo.titulo }}</strong>
+                    <a href="{{ asset('uploads/capitulos/' ~ capitulo.archivo) }}" target="_blank">
+                        Ver Capítulo
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
